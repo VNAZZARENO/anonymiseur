@@ -107,8 +107,16 @@
    * Les suggestions de noms relevées dans un bloc sont recherchées dans tous les blocs.
    */
   function analyser(blocs, termes) {
-    var suggestionsParBloc = blocs.map(function (texte) {
-      return noms.suggerer(texte);
+    // Un bloc est un texte, ou { texte, technique } ; un bloc technique (code de champ,
+    // cible de lien) suit les règles et la liste, sans suggestion tirée de sa forme.
+    var techniques = blocs.map(function (b) {
+      return typeof b !== 'string' && Boolean(b.technique);
+    });
+    blocs = blocs.map(function (b) {
+      return typeof b === 'string' ? b : b.texte;
+    });
+    var suggestionsParBloc = blocs.map(function (texte, i) {
+      return techniques[i] ? [] : noms.suggerer(texte);
     });
     var registre = (termes || []).map(function (t) {
       return { valeur: t, source: 'liste' };

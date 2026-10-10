@@ -174,3 +174,9 @@ test('la session retient les dates produites, pour le contrôle de sortie', () =
   assert.ok(session.datesProduites.has('DATE:2024-04-11'));
   assert.ok(session.datesProduites.has('DATE:2024-04'));
 });
+
+test('bloc technique (code de champ, cible de lien) : règles et liste appliquées, sans suggestion de nom', () => {
+  const blocs = [{ texte: ' HYPERLINK "mailto:zebulon@exemple.test" \\o "Tartempion" ', technique: true }, { texte: 'Texte courant.', technique: false }];
+  const candidats = r.analyser(blocs, ['Tartempion']);
+  assert.deepEqual(candidats[0].map((d) => [d.categorie, d.valeur]), [['COURRIEL', 'zebulon@exemple.test'], ['NOM', 'Tartempion']]);
+});
