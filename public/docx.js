@@ -5,7 +5,7 @@
  *  - produire() : écrit les remplacements dans le XML, vide les métadonnées, rend la nouvelle archive.
  * Un bloc est un paragraphe (son texte est reconstitué à partir des segments w:t),
  * un code de champ, une infobulle de lien ou la cible d'un lien externe.
- * Le XML qui n'est pas touché par un remplacement reste identique, octet pour octet.
+ * Hors des remplacements, le XML reste identique, octet pour octet.
  */
 (function (racine, fabrique) {
   'use strict';
@@ -111,7 +111,7 @@
     entrees.forEach(function (e) {
       if (/^word\/media\//.test(e.nom)) images += 1;
       if (/^word\/embeddings\//.test(e.nom)) objets += 1;
-      if (/^customXml\//i.test(e.nom)) liees = true;
+      if (e.nom.toLowerCase().indexOf('customxml/') === 0) liees = true;
       if (!/^word\//.test(e.nom) || !estXml(e.nom)) return;
       var xml = enTexte(e.donnees);
       if (/^word\/comments[^/]*\.xml$/.test(e.nom) && /<w:comment[\s>]/.test(xml)) commentaires = true;
@@ -417,7 +417,7 @@
   async function ouvrir(octets) {
     var entrees = await zip.lire(octets);
     if (!entrees.some(function (e) { return e.nom === 'word/document.xml'; })) {
-      throw new Error('Ce fichier n’est pas un document Word au format .docx. Enregistrez-le en .docx depuis Word, ou collez son texte.');
+      throw new Error('Un document Word au format .docx est attendu ; ce fichier a un autre format. Enregistrez-le en .docx depuis Word, ou collez son texte.');
     }
     return construire(entrees);
   }

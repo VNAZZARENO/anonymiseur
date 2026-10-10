@@ -298,6 +298,10 @@
         ecrite.cles.forEach(function (cle) {
           session.datesProduites.add(cle);
         });
+        // La date écrite est relue comme le fera le contrôle de sortie (année à deux chiffres comprise).
+        detecteurs.detecter(ecrite.texte).forEach(function (d) {
+          session.datesProduites.add(d.cle);
+        });
         return ecrite.texte;
       }
     }

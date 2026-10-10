@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Préparer un exemple anonymisé avant dépôt. Le document reste sur votre poste.">
+<title>Aide à l’anonymisation</title>
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="evitement" href="#contenu">Aller au contenu</a>
+
+<header class="bandeau">
+  <div class="largeur">
+    <h1>Aide à l’anonymisation</h1>
+    <p class="accroche">Préparez un exemple de document avant de le déposer. Le document reste sur votre poste : tout le traitement se fait dans ce navigateur, par des règles lisibles, sans modèle de langage.</p>
+    <p class="rappel">Cet outil vous aide et vous laisse la décision : la relecture complète reste la vôtre. <a href="#limites">Lire ce que l’outil ne voit pas</a>.</p>
+  </div>
+</header>
+
+<main id="contenu" class="largeur">
+  <noscript>
+    <p class="alerte">Cette page a besoin de JavaScript pour traiter le document dans votre navigateur. Activez-le pour cette page, puis rechargez-la.</p>
+  </noscript>
+  <div id="incompatible" class="alerte" role="alert" hidden></div>
+
+  <nav aria-label="Étapes du traitement">
+    <ol class="etapes" id="etapes">
+      <li id="repere-preparer" aria-current="step"><span class="numero">1</span> Préparer</li>
+      <li id="repere-relire"><span class="numero">2</span> Relire</li>
+      <li id="repere-exporter"><span class="numero">3</span> Exporter</li>
+    </ol>
+  </nav>
+  <p id="annonce" class="hors-ecran" role="status" aria-live="polite"></p>
+
+  <!-- Temps 1 : préparer -->
+  <section id="etape-preparer" class="etape" aria-labelledby="titre-preparer">
+    <h2 id="titre-preparer" tabindex="-1">1. Préparer</h2>
+
+    <div class="deux-colonnes">
+      <fieldset>
+        <legend>Le document</legend>
+        <div id="zone-depot" class="zone-depot">
+          <label for="fichier" class="libelle-depot">Déposez ici un fichier <strong>.docx</strong> ou <strong>.txt</strong>, ou choisissez-le :</label>
+          <input type="file" id="fichier" accept=".docx,.txt">
+          <p id="fichier-choisi" class="aide" aria-live="polite"></p>
+          <button type="button" id="retirer-fichier" class="discret" hidden>Retirer le fichier</button>
+        </div>
+        <label for="texte-colle">Ou collez le texte ici</label>
+        <textarea id="texte-colle" rows="9" spellcheck="false" aria-describedby="aide-formats"></textarea>
+        <p id="aide-formats" class="aide">Formats lus : texte collé, fichier .txt, fichier Word .docx. Pour un fichier .doc, .xls ou .xlsx, enregistrez-le en .docx depuis Word ou collez son texte. Un PDF ou un document scanné se prépare à la main.</p>
+      </fieldset>
+
+      <div>
+        <fieldset>
+          <legend>Les noms à masquer</legend>
+          <label for="liste-noms">Un nom par ligne : clients, parties adverses, témoins, médecins, sociétés, lieux</label>
+          <textarea id="liste-noms" rows="7" spellcheck="false" aria-describedby="aide-noms"></textarea>
+          <p id="aide-noms" class="aide">Cette liste est le moyen le plus sûr. Chaque nom est recherché en majuscules, en minuscules, sans accents, nom seul et prénom seul. L’outil propose aussi des noms d’après la forme du texte, à relire à l’étape suivante.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Les dates</legend>
+          <div class="choix">
+            <input type="radio" name="mode-dates" id="dates-decaler" value="decaler" checked>
+            <label for="dates-decaler">Décaler toutes les dates d’un même nombre de jours <span class="aide">(les formats et les intervalles restent valables)</span></label>
+          </div>
+          <div class="choix">
+            <input type="radio" name="mode-dates" id="dates-etiquette" value="etiquette">
+            <label for="dates-etiquette">Remplacer chaque date par une étiquette <span class="aide">([DATE 1], [DATE 2]…)</span></label>
+          </div>
+          <div class="choix">
+            <input type="radio" name="mode-dates" id="dates-conserver" value="conserver">
+            <label for="dates-conserver">Conserver les dates</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Les montants</legend>
+          <div class="choix">
+            <input type="checkbox" id="masquer-montants">
+            <label for="masquer-montants">Masquer les montants <span class="aide">(conservés par défaut : ils servent à essayer un modèle)</span></label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    <div id="erreur-preparer" class="alerte" role="alert" hidden></div>
+    <p class="actions">
+      <button type="button" id="analyser" class="principal">Analyser le document</button>
+      <button type="button" id="effacer-session-1" class="discret">Effacer la session</button>
+    </p>
+    <p id="etat-session" class="aide"></p>
+  </section>
+
+  <!-- Temps 2 : relire -->
+  <section id="etape-relire" class="etape" aria-labelledby="titre-relire" hidden>
+    <h2 id="titre-relire" tabindex="-1">2. Relire</h2>
+    <p id="resume-relire" class="resume"></p>
+    <div id="avis-document" class="avis" hidden></div>
+
+    <div class="relecture">
+      <div class="colonne-texte">
+        <fieldset class="vue">
+          <legend class="hors-ecran">Affichage du texte</legend>
+          <div class="choix en-ligne">
+            <input type="radio" name="vue" id="vue-origine" value="origine" checked>
+            <label for="vue-origine">Texte d’origine, détections surlignées</label>
+          </div>
+          <div class="choix en-ligne">
+            <input type="radio" name="vue" id="vue-apercu" value="apercu">
+            <label for="vue-apercu">Aperçu après remplacement</label>
+          </div>
+        </fieldset>
+        <div id="texte-relu" class="texte-relu" tabindex="0" role="region" aria-label="Texte du document"></div>
+        <p id="legende" class="legende"></p>
+        <div class="ajout">
+          <p class="aide" id="aide-selection">Un nom a échappé aux règles ? Sélectionnez-le dans le texte à la souris, ou saisissez-le ci-dessous.</p>
+          <p class="actions">
+            <button type="button" id="masquer-selection" disabled aria-describedby="aide-selection">Masquer cette expression partout</button>
+          </p>
+          <label for="expression">Expression à masquer partout</label>
+          <div class="ligne-saisie">
+            <input type="text" id="expression" autocomplete="off" spellcheck="false">
+            <button type="button" id="ajouter-expression">Ajouter</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="colonne-liste">
+        <h3 id="titre-detections">Éléments détectés</h3>
+        <p class="aide">Chaque élément coché est remplacé. Décochez ce qui doit rester dans le texte.</p>
+        <div id="liste-detections" role="group" aria-labelledby="titre-detections"></div>
+
+        <h3 id="titre-a-verifier">À vérifier</h3>
+        <p class="aide">Ce qui reste dans le texte après remplacement et mérite un regard : mots à majuscule, mots en majuscules, suites de chiffres.</p>
+        <div id="a-verifier" role="group" aria-labelledby="titre-a-verifier"></div>
+      </div>
+    </div>
+
+    <p class="actions">
+      <button type="button" id="retour-preparer">Revenir à la préparation</button>
+      <button type="button" id="vers-exporter" class="principal">Passer à l’export</button>
+    </p>
+  </section>
+
+  <!-- Temps 3 : exporter -->
+  <section id="etape-exporter" class="etape" aria-labelledby="titre-exporter" hidden>
+    <h2 id="titre-exporter" tabindex="-1">3. Exporter</h2>
+
+    <h3>Contrôle de sortie</h3>
+    <p class="aide">Le fichier produit est relu par les mêmes règles que l’analyse. Un seul élément reconnu qui subsiste bloque l’export.</p>
+    <div id="controle" class="controle" role="status" aria-live="polite"></div>
+    <ul id="restes" class="restes"></ul>
+
+    <div id="attestations" hidden>
+      <h3>Votre relecture</h3>
+      <div class="choix">
+        <input type="checkbox" id="atteste-relu">
+        <label for="atteste-relu">J’ai relu le document en entier après remplacement</label>
+      </div>
+      <div class="choix" id="bloc-images" hidden>
+        <input type="checkbox" id="atteste-images">
+        <label for="atteste-images" id="libelle-images">J’ai vérifié les images</label>
+      </div>
+      <p id="aide-images" class="aide" hidden></p>
+
+      <p class="actions">
+        <button type="button" id="telecharger" class="principal" disabled>Télécharger le fichier</button>
+        <button type="button" id="copier" disabled hidden>Copier le texte</button>
+      </p>
+      <p id="nom-produit" class="aide"></p>
+      <div id="bloc-texte-produit" hidden>
+        <label for="texte-produit">Texte après remplacement</label>
+        <textarea id="texte-produit" rows="10" readonly spellcheck="false"></textarea>
+      </div>
+      <p id="apres-export" class="aide" role="status" aria-live="polite"></p>
+    </div>
+
+    <p class="actions">
+      <button type="button" id="retour-relire">Revenir à la relecture</button>
+      <button type="button" id="autre-document">Traiter un autre document</button>
+      <button type="button" id="effacer-session-2" class="discret">Effacer la session</button>
+    </p>
+    <p class="aide">« Traiter un autre document » garde les étiquettes et le décalage des dates : une même personne reçoit la même étiquette d’un document à l’autre. « Effacer la session » remet tout à zéro. La table de correspondance vit dans la mémoire de cette page et disparaît à sa fermeture ou à son rechargement.</p>
+  </section>
+
+  <aside id="limites" class="encadre" aria-labelledby="titre-limites">
+    <h2 id="titre-limites">Ce que l’outil ne voit pas</h2>
+    <dl>
+      <dt>Les noms.</dt>
+      <dd>Les règles reconnaissent une forme et ignorent le sens. Échappent aux suggestions : un nom écrit sans majuscule, un nom qui est aussi un mot courant (« Petit », « Boulanger », « Rose »), une faute de frappe, des initiales, un surnom, un nom étranger à la forme inattendue, un nom glissé dans une adresse de courriel ou un nom de fichier. La liste que vous fournissez est le moyen le plus sûr.</dd>
+      <dt>L’identification indirecte.</dt>
+      <dd>Une profession, une commune, une date d’accident, une blessure rare ou un fait relaté par la presse suffisent parfois à reconnaître une personne, sans aucun nom. Aucune règle ne le voit. Le remède est humain : généraliser ou supprimer le passage.</dd>
+      <dt>Les dates et les montants.</dt>
+      <dd>Décalés ou conservés, ils restent des indices quand on les combine. Les dates des textes de loi et des décisions citées restent telles quelles, comme le nom et la ville des juridictions.</dd>
+      <dt>Ce que l’outil laisse intact.</dt>
+      <dd>Images, tampons, signatures, écriture manuscrite, objets incorporés, zones de texte de formes inhabituelles.</dd>
+      <dt>La portée juridique.</dt>
+      <dd>Le résultat est au mieux une pseudonymisation soignée. La qualification d’« exemple anonymisé » et la décision de dépôt appartiennent au cabinet, qui relit chaque document en entier avant de le transmettre.</dd>
+    </dl>
+  </aside>
+
+  <section id="verifier" class="encadre neutre" aria-labelledby="titre-verifier">
+    <h2 id="titre-verifier">Vérifier que le document reste sur votre poste</h2>
+    <ul>
+      <li><strong>Couper le réseau.</strong> Une fois la page affichée, coupez le Wi-Fi ou débranchez le câble : le traitement complet fonctionne, téléchargement du résultat compris.</li>
+      <li><strong>Regarder l’onglet « Réseau ».</strong> Ouvrez les outils du navigateur (touche F12), onglet « Réseau », puis traitez un document : la liste des requêtes reste vide après le chargement de la page.</li>
+      <li><strong>Utiliser la page hors ligne.</strong> Téléchargez le dépôt public et ouvrez le fichier <code>public/index.html</code> depuis le disque : la page fonctionne sans serveur.</li>
+      <li><strong>Relire les règles.</strong> Le code est public et court ; la page interdit elle-même à son navigateur toute connexion sortante et tout envoi de formulaire.</li>
+    </ul>
+    <p class="aide">Navigateurs pris en charge : Chrome, Edge, Firefox et Safari dans une version de 2023 ou plus récente.</p>
+  </section>
+</main>
+
+<footer class="pied">
+  <div class="largeur">
+    <p>Éditeur : Nazzareno Systems (Vincent Nazzareno, entreprise individuelle), nazzareno.fr. Code source : <a href="https://github.com/VNAZZARENO/anonymiseur" rel="noopener noreferrer">dépôt public de l’outil</a>.</p>
+    <p>Vos données : aucun document et aucun texte ne quittent votre navigateur. Aucun cookie, aucun stockage sur le poste, aucune mesure d’audience. Au chargement de la page, le serveur reçoit l’adresse IP du poste et l’heure de la demande, comme tout serveur web ; il ne reçoit plus rien ensuite.</p>
+  </div>
+</footer>
+
+<script src="zip.js"></script>
+<script src="detecteurs.js"></script>
+<script src="noms.js"></script>
+<script src="remplacement.js"></script>
+<script src="docx.js"></script>
+<script src="sortie.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

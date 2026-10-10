@@ -103,7 +103,7 @@
     var vue = new DataView(octets.buffer, octets.byteOffset, octets.byteLength);
     var fin = octets.length >= 22 ? trouverFin(vue) : -1;
     if (fin < 0) {
-      throw new Error('Ce fichier n’est pas une archive ZIP lisible.');
+      throw new Error('Archive illisible : ce fichier a un autre format que .docx, ou il est abîmé.');
     }
     var nombre = vue.getUint16(fin + 10, true);
     var position = vue.getUint32(fin + 16, true);
