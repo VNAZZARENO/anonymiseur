@@ -74,6 +74,11 @@ body {
   outline-offset: 2px;
 }
 
+/* Titre d'étape : il reçoit le focus par programme à chaque changement de temps, sans cadre. */
+h2[tabindex="-1"]:focus {
+  outline: none;
+}
+
 a {
   color: var(--accent);
 }
@@ -557,6 +562,7 @@ mark.posee {
 .lignes .detail .etiquette {
   font-family: ui-monospace, Consolas, "Liberation Mono", monospace;
   color: var(--encre);
+  white-space: nowrap;
 }
 
 .reste-a-voir {
@@ -601,27 +607,16 @@ mark.posee {
 }
 
 .encadre dl {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0.6rem 1.5rem;
   margin: 0;
 }
 
-.encadre dl > dt {
+.encadre dt {
+  margin-top: 0.6rem;
   font-weight: 700;
 }
 
 .encadre dd {
-  margin: 0;
-}
-
-.encadre dt,
-.encadre dd {
-  grid-column: 1 / -1;
-}
-
-.encadre dt {
-  margin-top: 0.35rem;
+  margin: 0.15rem 0 0;
 }
 
 .encadre ul {

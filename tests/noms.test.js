@@ -159,3 +159,9 @@ test('civilité collée au nom, forme de société en fin de nom', () => {
   assert.deepEqual(suggestions('la société ASSURANCES IMAGINAIRES SA, prise'), ['ASSURANCES IMAGINAIRES']);
   assert.deepEqual(suggestions('examiné au CHU de Villefictive hier'), ['Villefictive']);
 });
+
+test('la commune d’une juridiction reste dans le texte même quand elle est suggérée ailleurs ; un terme de la liste est masqué partout', () => {
+  const texte = 'Il est né à Lyon. Le Tribunal judiciaire de Lyon a statué.';
+  assert.deepEqual(noms.chercherTermes(texte, [{ valeur: 'Lyon', source: 'suggestion' }]).map((d) => d.debut), [12]);
+  assert.deepEqual(noms.chercherTermes(texte, ['Lyon']).map((d) => d.debut), [12, 44]);
+});

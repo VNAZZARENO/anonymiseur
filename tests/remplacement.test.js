@@ -180,3 +180,11 @@ test('bloc technique (code de champ, cible de lien) : règles et liste appliqué
   const candidats = r.analyser(blocs, ['Tartempion']);
   assert.deepEqual(candidats[0].map((d) => [d.categorie, d.valeur]), [['COURRIEL', 'zebulon@exemple.test'], ['NOM', 'Tartempion']]);
 });
+
+test('un mot pris dans une adresse reste hors des suggestions recherchées ailleurs', () => {
+  const blocs = ['Il demeure 12 rue des Lilas, 69003 Lyon.', 'Lilas en fleurs devant le Tribunal judiciaire de Lyon.'];
+  const candidats = r.analyser(blocs, []);
+  const session = r.creerSession({ alea: () => 0.5 });
+  assert.equal(r.remplacer(blocs[0], candidats[0], session, OPTIONS, new Map()).texte, 'Il demeure [ADRESSE 1].');
+  assert.equal(r.remplacer(blocs[1], candidats[1], session, OPTIONS, new Map()).texte, blocs[1]);
+});

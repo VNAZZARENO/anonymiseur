@@ -64,9 +64,14 @@
       trouvees.sort(function (a, b) {
         return a.debut - b.debut;
       });
-      trouvees.forEach(function (d) {
-        if (gardees.has(d.cle) || produites.has(d.cle)) return;
-        if (!traitee && !BLOQUANTES_HORS_TEXTE[d.categorie]) return;
+      var restantes = trouvees.filter(function (d) {
+        if (gardees.has(d.cle) || produites.has(d.cle)) return false;
+        return traitee || BLOQUANTES_HORS_TEXTE[d.categorie];
+      });
+      restantes.forEach(function (d) {
+        // Un reste contenu dans un autre (un nom dans un courriel) se montre une seule fois.
+        var contenu = restantes.some(function (g) { return g !== d && g.debut <= d.debut && d.fin <= g.fin && g.fin - g.debut > d.fin - d.debut; });
+        if (contenu) return;
         restes.push({ categorie: d.categorie, valeur: d.valeur, cle: d.cle, titre: titre, extrait: extrait(texte, d.debut, d.fin) });
       });
     });

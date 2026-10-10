@@ -118,18 +118,23 @@
     var suggestionsParBloc = blocs.map(function (texte, i) {
       return techniques[i] ? [] : noms.suggerer(texte);
     });
+    var reglesParBloc = blocs.map(function (texte) {
+      return detecteurs.detecter(texte);
+    });
     var registre = (termes || []).map(function (t) {
       return { valeur: t, source: 'liste' };
     });
-    suggestionsParBloc.forEach(function (liste) {
+    suggestionsParBloc.forEach(function (liste, i) {
       liste.forEach(function (s) {
-        registre.push({ valeur: s.valeur, source: 'suggestion' });
+        // Un mot pris dans une adresse ou un courriel est masqué avec eux ; il reste hors de la recherche générale.
+        var contenue = reglesParBloc[i].some(function (d) { return d.debut <= s.debut && s.fin <= d.fin; });
+        if (!contenue) registre.push({ valeur: s.valeur, source: 'suggestion' });
       });
     });
     var prepares = noms.preparer(registre);
 
     return blocs.map(function (texte, i) {
-      var candidats = detecteurs.detecter(texte);
+      var candidats = reglesParBloc[i];
       var parTermes = noms.chercher(texte, prepares);
       // Une suggestion relevée sur place et absente de la recherche (mot sans majuscule après « né à »).
       var directes = suggestionsParBloc[i].filter(function (s) {

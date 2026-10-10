@@ -100,3 +100,9 @@ test('à vérifier : mots courants et termes juridiques laissés de côté', () 
   const reste = sortie.aVerifier('Attendu que le Tribunal a statué. Il convient de dire. PAR CES MOTIFS. Monsieur conteste.');
   assert.deepEqual(reste, { initiales: [], majuscules: [], chiffres: [] });
 });
+
+test('contrôle de sortie : un reste contenu dans un autre est montré une seule fois', () => {
+  const reglages = { termes: ['Zébulon Tartempion'], gardees: new Set(), datesProduites: new Set() };
+  const restes = sortie.controler(['Écrire à zebulon.tartempion@exemple.test'], reglages);
+  assert.deepEqual(restes.map((x) => x.categorie), ['COURRIEL']);
+});

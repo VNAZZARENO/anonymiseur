@@ -46,13 +46,27 @@ const TYPE = {
 /*
  * corps : XML placé dans <w:body>. options.parties : { 'word/header1.xml': '...' } ajoutées telles quelles.
  * options.relationsRacine / relationsDocument : relations supplémentaires.
+ * options.section : élément w:sectPr du corps (références d'en-tête et de pied de page).
  */
 async function fabriquer(corps, options = {}) {
   const parties = options.parties || {};
   const surcharges = ['<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'];
+  const TYPES_DE_CONTENU = [
+    [/^docProps\/custom\.xml$/, 'application/vnd.openxmlformats-officedocument.custom-properties+xml'],
+    [/^docProps\/core\.xml$/, 'application/vnd.openxmlformats-package.core-properties+xml'],
+    [/^docProps\/app\.xml$/, 'application/vnd.openxmlformats-officedocument.extended-properties+xml'],
+    [/^word\/people\.xml$/, 'application/vnd.openxmlformats-officedocument.wordprocessingml.people+xml'],
+    [/^word\/header\d*\.xml$/, 'application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml'],
+    [/^word\/footer\d*\.xml$/, 'application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml'],
+    [/^word\/footnotes\.xml$/, 'application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml'],
+    [/^word\/endnotes\.xml$/, 'application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml'],
+    [/^word\/settings\.xml$/, 'application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml'],
+    [/^word\/comments\.xml$/, 'application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml'],
+  ];
   Object.keys(parties).forEach((nom) => {
-    if (/^docProps\/custom\.xml$/.test(nom)) surcharges.push('<Override PartName="/docProps/custom.xml" ContentType="application/vnd.openxmlformats-officedocument.custom-properties+xml"/>');
-    if (/^word\/people\.xml$/.test(nom)) surcharges.push('<Override PartName="/word/people.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.people+xml"/>');
+    TYPES_DE_CONTENU.forEach(([motif, type]) => {
+      if (motif.test(nom)) surcharges.push('<Override PartName="/' + nom + '" ContentType="' + type + '"/>');
+    });
   });
   const entrees = [
     {
@@ -67,7 +81,7 @@ async function fabriquer(corps, options = {}) {
       ),
     },
     { nom: '_rels/.rels', donnees: octets(relations([{ type: TYPE.document, cible: 'word/document.xml' }].concat(options.relationsRacine || []))) },
-    { nom: 'word/document.xml', donnees: octets(partieW('document', '<w:body>' + corps + '<w:sectPr/></w:body>')) },
+    { nom: 'word/document.xml', donnees: octets(partieW('document', '<w:body>' + corps + (options.section || '<w:sectPr/>') + '</w:body>')) },
   ];
   if (options.relationsDocument) {
     entrees.push({ nom: 'word/_rels/document.xml.rels', donnees: octets(relations(options.relationsDocument)) });

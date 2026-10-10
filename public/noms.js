@@ -226,7 +226,11 @@
       while ((m = p.re.exec(texte)) !== null) {
         var debut = m.index;
         var fin = debut + m[0].length;
-        if (p.source === 'suggestion' && !/^\p{Lu}/u.test(m[0])) continue;
+        if (p.source === 'suggestion') {
+          if (!/^\p{Lu}/u.test(m[0])) continue;
+          // La commune d'une juridiction reste dans le texte ; un terme de la liste, lui, est masqué partout.
+          if (JURIDICTION.test(texte.slice(Math.max(0, debut - 90), debut))) continue;
+        }
         if (etiquettes.some(function (e) { return debut < e.fin && e.debut < fin; })) continue;
         trouves.push({ debut: debut, fin: fin, categorie: 'NOM', valeur: m[0], cle: p.cle, entite: p.entite, source: p.source });
       }
