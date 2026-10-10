@@ -131,7 +131,9 @@ node --test
 
 Node 20 ou plus récent ; les tests appellent `zip` et `unzip` du système. Tous les noms, numéros et documents des tests sont inventés.
 
-Parcours complet dans un navigateur réel (Chrome ou Chromium installé, aucun paquet à ajouter) :
+Avec Node 22, la commande s'écrit `node --test` sans nom de dossier.
+
+Parcours complet dans un navigateur réel (Node 22 ou plus récent, Chrome ou Chromium installé, aucun paquet à ajouter) :
 
 ```
 node tests/navigateur/parcours.mjs
