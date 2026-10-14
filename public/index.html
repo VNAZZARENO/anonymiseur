@@ -7,21 +7,25 @@
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="Préparer un exemple anonymisé avant dépôt. Le document reste sur votre poste.">
 <title>Aide à l’anonymisation</title>
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="ns/web/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="ns/ns.css">
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
 <a class="evitement" href="#contenu">Aller au contenu</a>
 
-<header class="bandeau">
-  <div class="largeur">
+<header class="ns-entete entete">
+  <span class="ns-logo"><img src="ns/logo/signe.svg" alt="" width="28" height="28"><span class="ns-logo__nom">Nazzareno Systems</span></span>
+  <span class="ns-badge ns-badge--fait">Traitement dans ce navigateur</span>
+</header>
+
+<main id="contenu" class="largeur">
+  <div class="introduction">
+    <p class="ns-surtitre">Outil de préparation</p>
     <h1>Aide à l’anonymisation</h1>
     <p class="accroche">Préparez un exemple de document avant de le déposer. Le document reste sur votre poste : tout le traitement se fait dans ce navigateur, par des règles lisibles, sans modèle de langage.</p>
     <p class="rappel">Cet outil vous aide et vous laisse la décision : la relecture complète reste la vôtre. <a href="#limites">Lire ce que l’outil ne voit pas</a>.</p>
   </div>
-</header>
-
-<main id="contenu" class="largeur">
   <noscript>
     <p class="alerte">Cette page a besoin de JavaScript pour traiter le document dans votre navigateur. Activez-le pour cette page, puis rechargez-la.</p>
   </noscript>
@@ -218,6 +222,7 @@
 
 <footer class="pied">
   <div class="largeur">
+    <p class="ns-logo"><img src="ns/logo/signe.svg" alt="" width="22" height="22"><span class="ns-logo__nom">Nazzareno Systems</span></p>
     <p>Éditeur : Nazzareno Systems (Vincent Nazzareno, entreprise individuelle), nazzareno.fr. Code source : <a href="https://github.com/VNAZZARENO/anonymiseur" rel="noopener noreferrer">dépôt public de l’outil</a>.</p>
     <p>Vos données : aucun document et aucun texte ne quittent votre navigateur. Aucun cookie, aucun stockage sur le poste, aucune mesure d’audience. Au chargement de la page, le serveur reçoit l’adresse IP du poste et l’heure de la demande, comme tout serveur web ; il ne reçoit plus rien ensuite.</p>
   </div>

@@ -1,39 +1,13 @@
-/* Aide à l'anonymisation : feuille de style. Polices du système, aucune ressource appelée. */
-
-:root {
-  --encre: #1b2430;
-  --encre-douce: #4a5563;
-  --fond: #f6f5f1;
-  --papier: #ffffff;
-  --trait: #c8c4ba;
-  --accent: #1f3a5f;
-  --accent-clair: #e6edf5;
-  --alerte: #8a1c1c;
-  --alerte-fond: #fbeaea;
-  --succes: #1d5b33;
-  --succes-fond: #e6f3ea;
-  --avis-fond: #fff6dc;
-  --avis-trait: #b98900;
-}
-
-* {
-  box-sizing: border-box;
-}
+/* Aide à l'anonymisation : feuille de style propre à l'outil, posée sur l'identité Nazzareno Systems
+   (ns/ns.css, copiée par identite/sync.sh). Couleurs et polices : les jetons --ns-… ; polices servies
+   par la page elle-même, chargées avec elle. */
 
 [hidden] {
   display: none !important;
 }
 
-html {
-  font-size: 100%;
-}
-
 body {
-  margin: 0;
-  background: var(--fond);
-  color: var(--encre);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.5;
+  font-size: 1rem;
 }
 
 .largeur {
@@ -46,9 +20,10 @@ body {
   position: absolute;
   left: -999rem;
   top: 0;
-  background: var(--papier);
-  color: var(--accent);
+  background: var(--ns-blanc);
+  color: var(--ns-encre);
   padding: 0.5rem 1rem;
+  border-radius: var(--ns-rayon-petit);
   z-index: 10;
 }
 
@@ -69,48 +44,41 @@ body {
   border: 0;
 }
 
-:focus-visible {
-  outline: 3px solid #b45f06;
-  outline-offset: 2px;
-}
-
 /* Titre d'étape : il reçoit le focus par programme à chaque changement de temps, sans cadre. */
 h2[tabindex="-1"]:focus {
   outline: none;
 }
 
-a {
-  color: var(--accent);
+/* ---------- En-tête et introduction ---------- */
+
+.entete {
+  padding-left: max(1.25rem, calc((100% - 76rem) / 2 + 1.25rem));
+  padding-right: max(1.25rem, calc((100% - 76rem) / 2 + 1.25rem));
 }
 
-/* ---------- Bandeau ---------- */
-
-.bandeau {
-  background: var(--accent);
-  color: #ffffff;
-  padding: 1.25rem 0 1rem;
+.entete .ns-badge {
+  margin-left: auto;
 }
 
-.bandeau h1 {
-  margin: 0 0 0.35rem;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.75rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+.introduction {
+  padding: 2rem 0 0.5rem;
 }
 
-.bandeau p {
-  margin: 0.25rem 0;
-  max-width: 62rem;
+.introduction h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.6rem;
 }
 
-.bandeau .rappel {
-  color: #dbe5f1;
-  font-size: 0.95rem;
+.introduction p {
+  max-width: 50rem;
 }
 
-.bandeau a {
-  color: #ffffff;
+.accroche {
+  font-size: 1.08rem;
+}
+
+.rappel {
+  color: var(--ns-ardoise);
 }
 
 /* ---------- Étapes ---------- */
@@ -125,61 +93,56 @@ a {
 
 .etapes li {
   flex: 1;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--trait);
-  border-radius: 4px;
-  background: var(--papier);
-  color: var(--encre-douce);
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--ns-ligne);
+  border-radius: var(--ns-rayon);
+  background: var(--ns-blanc);
+  color: var(--ns-ardoise);
+  font-weight: 500;
 }
 
 .etapes li[aria-current="step"] {
-  border-color: var(--accent);
-  background: var(--accent-clair);
-  color: var(--accent);
-  box-shadow: inset 0 -3px 0 var(--accent);
+  border-color: var(--ns-encre);
+  background: var(--ns-encre);
+  color: var(--ns-blanc);
+  font-weight: 600;
 }
 
 .etapes .numero {
-  display: inline-block;
+  display: inline-grid;
+  place-items: center;
   width: 1.6rem;
   height: 1.6rem;
-  margin-right: 0.35rem;
-  border-radius: 50%;
-  background: var(--encre-douce);
-  color: #ffffff;
-  text-align: center;
-  line-height: 1.6rem;
-  font-size: 0.9rem;
+  border-radius: 999px;
+  background: var(--ns-glacier);
+  color: var(--ns-encre);
+  font: 500 0.8rem/1 var(--ns-chiffre);
 }
 
 .etapes li[aria-current="step"] .numero {
-  background: var(--accent);
+  background: var(--ns-vermillon);
+  color: var(--ns-blanc);
 }
 
 .etape {
-  background: var(--papier);
-  border: 1px solid var(--trait);
-  border-radius: 6px;
-  padding: 1rem 1.25rem 1.25rem;
+  background: var(--ns-blanc);
+  border: 1px solid var(--ns-ligne);
+  border-radius: var(--ns-rayon-grand);
+  box-shadow: var(--ns-ombre);
+  padding: 1.25rem 1.5rem 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-h2 {
-  margin: 0 0 0.75rem;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.35rem;
-  color: var(--accent);
-}
-
 h3 {
-  margin: 1rem 0 0.35rem;
-  font-size: 1.05rem;
+  margin: 1.1rem 0 0.4rem;
 }
 
 h4 {
   margin: 0.9rem 0 0.25rem;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
 }
 
 /* ---------- Formulaires ---------- */
@@ -193,56 +156,71 @@ h4 {
 fieldset {
   margin: 0 0 1rem;
   padding: 0.75rem 1rem 0.9rem;
-  border: 1px solid var(--trait);
-  border-radius: 4px;
+  border: 1px solid var(--ns-ligne);
+  border-radius: var(--ns-rayon);
   min-width: 0;
 }
 
 legend {
   padding: 0 0.4rem;
-  font-weight: 700;
+  font: 500 0.7rem/1 var(--ns-chiffre);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ns-ardoise);
 }
 
 label {
-  display: block;
-  margin: 0.5rem 0 0.25rem;
+  margin: 0.5rem 0 0.3rem;
+  font-size: 0.93rem;
   font-weight: 600;
 }
 
 textarea,
 input[type="text"] {
-  width: 100%;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid #6f7783;
-  border-radius: 4px;
-  background: #ffffff;
-  color: var(--encre);
-  font: inherit;
+  max-width: none;
 }
 
 textarea {
   resize: vertical;
-  font-family: ui-monospace, "Cascadia Mono", Consolas, "Liberation Mono", monospace;
-  font-size: 0.9rem;
+  font-family: var(--ns-chiffre);
+  font-size: 0.88rem;
 }
 
 .aide {
   margin: 0.3rem 0;
-  color: var(--encre-douce);
+  color: var(--ns-ardoise);
   font-size: 0.9rem;
   font-weight: 400;
 }
 
 .zone-depot {
-  padding: 0.75rem 0.9rem;
-  border: 2px dashed #6f7783;
-  border-radius: 6px;
-  background: #fbfaf7;
+  margin-bottom: 0.5rem;
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed var(--ns-encre-voilee);
+  border-radius: var(--ns-rayon);
+  background: var(--ns-brume);
 }
 
 .zone-depot.survol {
-  border-color: var(--accent);
-  background: var(--accent-clair);
+  border-style: solid;
+  border-color: var(--ns-encre);
+  background: var(--ns-glacier);
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 6px 12px;
+  border: 1px solid var(--ns-ligne-forte);
+  border-radius: var(--ns-rayon-petit);
+  background: var(--ns-blanc);
+  color: var(--ns-encre);
+  font: 600 0.87rem/1.2 var(--ns-texte);
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: var(--ns-glacier);
+  border-color: var(--ns-encre);
 }
 
 .zone-depot label {
@@ -254,11 +232,11 @@ textarea {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  margin: 0.3rem 0;
+  margin: 0.35rem 0;
 }
 
 .choix input {
-  margin-top: 0.3rem;
+  margin-top: 0.25rem;
   flex: none;
   width: 1.05rem;
   height: 1.05rem;
@@ -278,50 +256,44 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
-  margin: 0.9rem 0 0.3rem;
+  margin: 1rem 0 0.3rem;
 }
 
+/* Boutons : le principal en aplat d'encre (base de ns.css), les autres en secondaire, « discret » en lien. */
 button {
-  padding: 0.5rem 0.95rem;
-  border: 1px solid var(--accent);
-  border-radius: 4px;
-  background: #ffffff;
-  color: var(--accent);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
+  font-size: 0.9rem;
 }
 
-button:hover:not(:disabled) {
-  background: var(--accent-clair);
+button:not(.principal) {
+  background: var(--ns-blanc);
+  color: var(--ns-encre);
+  border-color: var(--ns-ligne-forte);
 }
 
-button.principal {
-  background: var(--accent);
-  color: #ffffff;
-}
-
-button.principal:hover:not(:disabled) {
-  background: #162b47;
+button:not(.principal):hover:not(:disabled) {
+  background: var(--ns-glacier);
+  border-color: var(--ns-encre);
 }
 
 button.discret {
-  border-color: var(--trait);
-  color: var(--encre-douce);
-  font-weight: 400;
+  border-color: transparent;
+  background: none;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--ns-encre-voilee);
+  text-underline-offset: 3px;
+}
+
+button.discret:hover:not(:disabled) {
+  border-color: transparent;
+  background: none;
+  text-decoration-color: var(--ns-encre);
 }
 
 button.petit {
-  padding: 0.1rem 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 400;
-}
-
-button:disabled {
-  border-color: var(--trait);
-  background: #ecebe7;
-  color: #5d6570;
-  cursor: not-allowed;
+  padding: 3px 9px;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .ligne-saisie {
@@ -337,10 +309,10 @@ button:disabled {
 
 .alerte {
   margin: 0.75rem 0;
-  padding: 0.7rem 0.9rem;
-  border-left: 5px solid var(--alerte);
-  background: var(--alerte-fond);
-  color: #5c1010;
+  padding: 0.7rem 0.95rem;
+  border-radius: var(--ns-rayon);
+  background: var(--ns-brique-pale);
+  color: var(--ns-brique);
 }
 
 .alerte p,
@@ -350,34 +322,33 @@ button:disabled {
 
 .avis {
   margin: 0.5rem 0 0.75rem;
-  padding: 0.6rem 0.9rem;
-  border-left: 5px solid var(--avis-trait);
-  background: var(--avis-fond);
+  padding: 0.6rem 0.95rem;
+  border: 1px solid var(--ns-ambre);
+  border-radius: var(--ns-rayon);
+  background: var(--ns-blanc);
 }
 
 .resume {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.6rem;
   font-weight: 600;
 }
 
 .controle {
   margin: 0.5rem 0;
-  padding: 0.7rem 0.9rem;
-  border-left: 5px solid var(--trait);
-  background: #f1f0ec;
+  padding: 0.7rem 0.95rem;
+  border-radius: var(--ns-rayon);
+  background: var(--ns-brume);
   font-weight: 600;
 }
 
 .controle.passe {
-  border-color: var(--succes);
-  background: var(--succes-fond);
-  color: #123d22;
+  background: var(--ns-glacier);
+  color: var(--ns-vert);
 }
 
 .controle.bloque {
-  border-color: var(--alerte);
-  background: var(--alerte-fond);
-  color: #5c1010;
+  background: var(--ns-brique-pale);
+  color: var(--ns-brique);
 }
 
 .restes {
@@ -391,9 +362,9 @@ button:disabled {
 
 .restes .extrait {
   display: block;
-  color: var(--encre-douce);
-  font-family: ui-monospace, Consolas, "Liberation Mono", monospace;
-  font-size: 0.85rem;
+  color: var(--ns-ardoise);
+  font-family: var(--ns-chiffre);
+  font-size: 0.82rem;
 }
 
 /* ---------- Relecture ---------- */
@@ -414,12 +385,12 @@ button:disabled {
   height: 60vh;
   min-height: 16rem;
   overflow: auto;
-  padding: 0.9rem 1.1rem;
-  border: 1px solid #6f7783;
-  border-radius: 4px;
-  background: #ffffff;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--ns-ligne-forte);
+  border-radius: var(--ns-rayon);
+  background: var(--ns-blanc);
+  font-family: var(--ns-titre);
+  font-size: 1.02rem;
   line-height: 1.7;
 }
 
@@ -431,12 +402,11 @@ button:disabled {
 
 .texte-relu .partie {
   margin: 1.1rem 0 0.4rem;
-  padding-bottom: 0.15rem;
-  border-bottom: 1px solid var(--trait);
-  color: var(--encre-douce);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--ns-ligne);
+  color: var(--ns-ardoise);
+  font: 500 0.7rem/1.4 var(--ns-chiffre);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -446,21 +416,22 @@ button:disabled {
 
 .genre {
   margin-right: 0.4rem;
-  padding: 0 0.35rem;
-  border: 1px solid var(--trait);
-  border-radius: 3px;
-  color: var(--encre-douce);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 0.75rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--ns-glacier);
+  color: var(--ns-ardoise);
+  font: 500 0.7rem/1.4 var(--ns-chiffre);
 }
 
 mark {
   padding: 0.05em 0.15em;
   border-radius: 3px;
-  color: #111111;
+  color: var(--ns-encre);
   cursor: default;
 }
 
+/* Couleurs des catégories : repères de lecture propres à l'outil, hors palette, soulignés pour qui ne
+   distingue pas les teintes. */
 mark.groupe-nom { background: #ffe58f; box-shadow: inset 0 -2px 0 #a37b00; }
 mark.groupe-contact { background: #cfe2ff; box-shadow: inset 0 -2px 0 #2c5aa0; }
 mark.groupe-identifiant { background: #f8d3e2; box-shadow: inset 0 -2px 0 #9c2f5f; }
@@ -470,20 +441,20 @@ mark.groupe-montant { background: #e2dcf7; box-shadow: inset 0 -2px 0 #5a45a8; }
 mark.gardee {
   background: transparent;
   box-shadow: none;
-  outline: 1px dashed #5d6570;
+  outline: 1px dashed var(--ns-ardoise);
 }
 
 mark.posee {
-  background: #e7e6e2;
-  box-shadow: inset 0 0 0 1px #6f7783;
-  font-family: ui-monospace, Consolas, "Liberation Mono", monospace;
-  font-size: 0.88em;
+  background: var(--ns-glacier);
+  box-shadow: inset 0 0 0 1px var(--ns-encre-voilee);
+  font-family: var(--ns-chiffre);
+  font-size: 0.85em;
 }
 
 .legende {
-  margin: 0.4rem 0;
+  margin: 0.5rem 0;
   font-size: 0.85rem;
-  color: var(--encre-douce);
+  color: var(--ns-ardoise);
 }
 
 .legende mark {
@@ -491,20 +462,20 @@ mark.posee {
 }
 
 .ajout {
-  margin-top: 0.5rem;
-  padding: 0.6rem 0.9rem 0.8rem;
-  border: 1px solid var(--trait);
-  border-radius: 4px;
-  background: #fbfaf7;
+  margin-top: 0.6rem;
+  padding: 0.7rem 0.95rem 0.85rem;
+  border: 1px solid var(--ns-ligne);
+  border-radius: var(--ns-rayon);
+  background: var(--ns-brume);
 }
 
 .colonne-liste {
   max-height: calc(60vh + 16rem);
   overflow: auto;
-  padding: 0 0.9rem 0.9rem;
-  border: 1px solid var(--trait);
-  border-radius: 4px;
-  background: #fbfaf7;
+  padding: 0 1rem 1rem;
+  border: 1px solid var(--ns-ligne);
+  border-radius: var(--ns-rayon);
+  background: var(--ns-brume);
 }
 
 .categorie {
@@ -512,9 +483,9 @@ mark.posee {
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem;
-  margin: 0.9rem 0 0.2rem;
-  padding-bottom: 0.15rem;
-  border-bottom: 1px solid var(--trait);
+  margin: 1rem 0 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--ns-ligne-forte);
 }
 
 .categorie h4 {
@@ -532,8 +503,8 @@ mark.posee {
   grid-template-columns: auto minmax(0, 1fr);
   column-gap: 0.5rem;
   align-items: start;
-  padding: 0.25rem 0;
-  border-bottom: 1px dotted #dcd9d1;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--ns-ligne);
 }
 
 .lignes input {
@@ -555,13 +526,13 @@ mark.posee {
 
 .lignes .detail {
   display: block;
-  color: var(--encre-douce);
+  color: var(--ns-ardoise);
   font-size: 0.85rem;
 }
 
 .lignes .detail .etiquette {
-  font-family: ui-monospace, Consolas, "Liberation Mono", monospace;
-  color: var(--encre);
+  font-family: var(--ns-chiffre);
+  color: var(--ns-encre);
   white-space: nowrap;
 }
 
@@ -578,10 +549,10 @@ mark.posee {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.1rem 0.2rem 0.1rem 0.5rem;
-  border: 1px solid var(--trait);
-  border-radius: 4px;
-  background: #ffffff;
+  padding: 0.1rem 0.2rem 0.1rem 0.55rem;
+  border: 1px solid var(--ns-ligne);
+  border-radius: var(--ns-rayon-petit);
+  background: var(--ns-blanc);
   font-size: 0.9rem;
 }
 
@@ -589,21 +560,15 @@ mark.posee {
 
 .encadre {
   margin: 0 0 1.5rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--avis-trait);
-  border-left-width: 6px;
-  border-radius: 4px;
-  background: var(--avis-fond);
+  padding: 1.1rem 1.5rem 1.2rem;
+  border: 1px solid var(--ns-glacier);
+  border-radius: var(--ns-rayon-grand);
+  background: var(--ns-glacier);
 }
 
 .encadre.neutre {
-  border-color: var(--trait);
-  border-left-color: var(--accent);
-  background: var(--papier);
-}
-
-.encadre h2 {
-  color: var(--encre);
+  border-color: var(--ns-ligne);
+  background: var(--ns-blanc);
 }
 
 .encadre dl {
@@ -611,8 +576,8 @@ mark.posee {
 }
 
 .encadre dt {
-  margin-top: 0.6rem;
-  font-weight: 700;
+  margin-top: 0.7rem;
+  font-weight: 600;
 }
 
 .encadre dd {
@@ -625,25 +590,40 @@ mark.posee {
 }
 
 .encadre li {
-  margin: 0.3rem 0;
+  margin: 0.35rem 0;
 }
 
 code {
-  font-family: ui-monospace, Consolas, "Liberation Mono", monospace;
-  font-size: 0.92em;
+  font-size: 0.9em;
 }
 
 /* ---------- Pied de page ---------- */
 
 .pied {
-  border-top: 1px solid var(--trait);
-  padding: 1rem 0 2rem;
-  color: var(--encre-douce);
-  font-size: 0.9rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--ns-ligne);
+  background: var(--ns-blanc);
+  padding: 1.25rem 0 2rem;
+  color: var(--ns-ardoise);
+  font-size: 0.88rem;
+}
+
+.pied .ns-logo {
+  margin-bottom: 0.6rem;
+}
+
+.pied .ns-logo img {
+  width: 22px;
+  height: 22px;
+}
+
+.pied .ns-logo__nom {
+  font-size: 1rem;
 }
 
 .pied p {
   margin: 0.3rem 0;
+  max-width: 60rem;
 }
 
 /* ---------- Écrans étroits ---------- */
@@ -663,8 +643,19 @@ code {
   }
 }
 
+@media (max-width: 40rem) {
+  .introduction h1 {
+    font-size: 1.7rem;
+  }
+
+  .etapes li {
+    padding: 0.5rem;
+    font-size: 0.88rem;
+  }
+}
+
 @media print {
-  .bandeau,
+  .entete,
   .etapes,
   .actions,
   .pied {

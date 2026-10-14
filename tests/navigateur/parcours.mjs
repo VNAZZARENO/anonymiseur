@@ -101,7 +101,7 @@ function enTetesCaddy() {
 }
 
 function servir() {
-  const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.ico': 'image/x-icon' };
+  const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.ico': 'image/x-icon', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.png': 'image/png' };
   const enTetes = enTetesCaddy();
   const serveur = http.createServer((requete, reponse) => {
     const chemin = decodeURIComponent(new URL(requete.url, 'http://x').pathname);

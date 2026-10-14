@@ -104,8 +104,8 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory public
 ```
 public/
   index.html        page unique
-  favicon.ico       icône de 16 points (évite une demande sans réponse au chargement)
-  app.css           feuille de style, polices du système
+  app.css           feuille de style de l'outil, posée sur ns/ns.css
+  ns/               identité Nazzareno Systems copiée par identite/sync.sh : jetons, ns.css, polices WOFF2, logos, icônes
   app.js            interface : saisies, affichage, téléchargement
   detecteurs.js     règles déterministes et contrôles (modulo 97, Luhn, calendrier)
   noms.js           liste de l'utilisateur, variantes, suggestions, lexique juridique
@@ -122,6 +122,12 @@ Caddyfile.anonymiseur
 ```
 
 Aucune dépendance : ni paquet, ni étape de construction.
+
+## Identité
+
+La page porte la charte Nazzareno Systems (Encre et vermillon, Fraunces, IBM Plex Sans et Mono). `public/ns/` est une copie produite par le dépôt `~/nazzareno/identite`, à ne pas modifier ici : pour suivre une nouvelle version, `./sync.sh ~/nazzareno/anonymiseur/public/ns` depuis ce dépôt, puis valider la copie. `app.css` n'emploie que les jetons `--ns-…`, sauf les couleurs des catégories surlignées, propres à l'outil.
+
+Les polices sont servies par la page et chargées avec elle : les quatre fichiers employés (Fraunces droit, Plex Sans, Plex Mono 400 et 500) sont demandés au premier affichage, puisqu'un texte visible de l'écran d'ouverture emploie chacun d'eux. La recette en navigateur le vérifie : aucune requête après le chargement. Ouverte depuis le disque, la page peut afficher les polices de repli selon le navigateur.
 
 ## Tests
 

@@ -1,0 +1,138 @@
+/* Identité Nazzareno Systems : base et composants pour l'écran.
+   Les valeurs viennent de jetons.css ; aucune couleur n'est écrite ici. */
+@import url("fonts/polices.css");
+@import url("jetons.css");
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; font-family: var(--ns-texte); font-size: 15px; line-height: 1.5; color: var(--ns-encre); background: var(--ns-brume); }
+h1, h2, h3, h4 { font-family: var(--ns-titre); font-weight: 500; line-height: 1.15; margin: 0 0 .5em; color: var(--ns-encre); }
+h1 { font-size: 1.9rem; }
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 1rem; }
+p { margin: 0 0 .8em; }
+a { color: var(--ns-encre); text-decoration: underline; text-decoration-color: var(--ns-encre-voilee); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--ns-encre); }
+small, .ns-discret { color: var(--ns-ardoise); }
+code, kbd, .ns-chiffre { font-family: var(--ns-chiffre); font-variant-numeric: tabular-nums; }
+hr { border: 0; border-top: 1px solid var(--ns-ligne); margin: 24px 0; }
+:focus-visible { outline: 2px solid var(--ns-encre); outline-offset: 2px; }
+.ns-page { max-width: 72rem; margin: 0 auto; padding: 24px; }
+
+/* ---------- Tableaux ---------- */
+table, .ns-tableau { width: 100%; border-collapse: collapse; background: var(--ns-blanc); font-size: .93rem; }
+th { font-family: var(--ns-chiffre); font-size: .7rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ns-ardoise); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--ns-ligne-forte); }
+td { padding: 9px 12px; border-bottom: 1px solid var(--ns-ligne); vertical-align: top; }
+tbody th, tfoot th { font-family: var(--ns-texte); font-size: inherit; font-weight: 600; letter-spacing: normal; text-transform: none; color: var(--ns-encre); padding: 9px 12px; border-bottom: 1px solid var(--ns-ligne); vertical-align: top; }
+td.ns-nombre, th.ns-nombre { text-align: right; font-family: var(--ns-chiffre); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ns-defile { overflow-x: auto; }
+
+/* ---------- Formulaires ---------- */
+label { display: block; font-size: .87rem; font-weight: 500; margin-bottom: 4px; }
+input, select, textarea { font: inherit; color: var(--ns-encre); background: var(--ns-blanc); border: 1px solid var(--ns-encre-voilee); border-radius: var(--ns-rayon-petit); padding: 7px 10px; width: 100%; max-width: 32rem; }
+input[type="checkbox"], input[type="radio"] { width: auto; accent-color: var(--ns-encre); }
+textarea { min-height: 6rem; }
+.ns-champ { margin-bottom: 14px; }
+.ns-champ small { display: block; margin-top: 4px; }
+input[type="date"], input[type="time"], input[type="month"], input[type="number"] { width: auto; }
+input[type="file"] { border: 0; padding: 0; border-radius: 0; background: none; }
+/* Champ placé dans son libellé, case à cocher en ligne. `:where` garde la spécificité d'un
+   simple `label` : la classe d'un consommateur (`label.voir`, `.champ input`) l'emporte. */
+label > :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea) { display: block; margin-top: 4px; font-weight: 400; font-size: 1.15em; }
+label:where(:has(> input[type="checkbox"]), :has(> input[type="radio"])) { display: flex; align-items: center; gap: 8px; font-weight: 400; }
+
+/* ---------- Boutons ---------- */
+button, .ns-bouton { display: inline-flex; align-items: center; gap: 6px; font: 600 .87rem/1.2 var(--ns-texte); padding: 8px 14px; border-radius: var(--ns-rayon-petit); border: 1px solid var(--ns-encre); background: var(--ns-encre); color: var(--ns-blanc); cursor: pointer; text-decoration: none; white-space: nowrap; }
+button:hover, .ns-bouton:hover { background: var(--ns-encre-claire); border-color: var(--ns-encre-claire); }
+.ns-bouton--secondaire { background: var(--ns-blanc); color: var(--ns-encre); border-color: var(--ns-ligne-forte); }
+.ns-bouton--secondaire:hover { background: var(--ns-glacier); border-color: var(--ns-encre); }
+.ns-bouton--petit { font-size: .78rem; padding: 4px 9px; }
+.ns-bouton--danger { background: var(--ns-brique); border-color: var(--ns-brique); color: var(--ns-blanc); }
+.ns-bouton--danger:hover { background: var(--ns-brique); border-color: var(--ns-brique); text-decoration: underline; }
+.ns-bouton--lien { background: none; border-color: transparent; color: var(--ns-encre); text-decoration: underline; text-decoration-color: var(--ns-encre-voilee); text-underline-offset: 3px; font-weight: 500; padding-left: 2px; padding-right: 2px; }
+.ns-bouton--lien:hover { background: none; border-color: transparent; text-decoration-color: var(--ns-encre); }
+.ns-bouton--lien.ns-bouton--danger { color: var(--ns-brique); text-decoration-color: var(--ns-brique); }
+button:disabled, .ns-bouton[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
+
+/* ---------- Étiquettes ---------- */
+.ns-surtitre { font: 500 .7rem/1 var(--ns-chiffre); letter-spacing: .14em; text-transform: uppercase; color: var(--ns-vermillon-texte); margin: 0 0 6px; }
+.ns-badge { display: inline-block; font: 500 .72rem/1 var(--ns-chiffre); padding: 4px 8px; border-radius: 999px; background: var(--ns-glacier); color: var(--ns-ardoise); white-space: nowrap; }
+.ns-badge--nouveau { background: var(--ns-vermillon-pale); color: var(--ns-vermillon-texte); }
+.ns-badge--retard { background: var(--ns-brique-pale); color: var(--ns-brique); }
+.ns-badge--vigilance { background: var(--ns-blanc); color: var(--ns-ambre); border: 1px solid var(--ns-ambre); padding: 3px 7px; }
+.ns-badge--fait { background: var(--ns-glacier); color: var(--ns-vert); }
+.ns-pastille { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; font: 500 .68rem/1 var(--ns-chiffre); background: var(--ns-vermillon-texte); color: var(--ns-blanc); }
+
+/* ---------- Alertes ---------- */
+.ns-alerte { display: flex; gap: 10px; align-items: baseline; padding: 10px 14px; border-radius: var(--ns-rayon); background: var(--ns-brique-pale); color: var(--ns-brique); }
+.ns-alerte + .ns-alerte { margin-top: 8px; }
+.ns-alerte strong:first-child { font: 500 .7rem/1 var(--ns-chiffre); letter-spacing: .1em; text-transform: uppercase; }
+.ns-alerte--vigilance { background: var(--ns-blanc); color: var(--ns-ambre); border: 1px solid var(--ns-ambre); padding: 9px 13px; }
+.ns-alerte--fait { background: var(--ns-glacier); color: var(--ns-vert); }
+
+/* ---------- Cartes, tuiles, listes ---------- */
+.ns-carte { background: var(--ns-blanc); border: 1px solid var(--ns-ligne); border-radius: var(--ns-rayon-grand); padding: 16px 18px; }
+.ns-carte--accent { background: var(--ns-glacier); border-color: var(--ns-glacier); }
+.ns-tuiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.ns-tuile { background: var(--ns-blanc); border: 1px solid var(--ns-ligne); border-radius: var(--ns-rayon-grand); padding: 12px 14px; }
+.ns-tuile__titre { font: 500 .68rem/1 var(--ns-chiffre); letter-spacing: .12em; text-transform: uppercase; color: var(--ns-ardoise); margin: 0 0 8px; }
+.ns-tuile__valeur { font: 500 1.35rem/1.2 var(--ns-chiffre); font-variant-numeric: tabular-nums; margin: 0 0 2px; }
+.ns-liste { list-style: none; margin: 0; padding: 0; background: var(--ns-blanc); border: 1px solid var(--ns-ligne); border-radius: var(--ns-rayon); }
+.ns-liste > li { display: flex; gap: 12px; align-items: center; padding: 9px 14px; }
+.ns-liste > li + li { border-top: 1px solid var(--ns-ligne); }
+.ns-liste__date { flex: 0 0 7.5rem; font: .82rem/1.3 var(--ns-chiffre); color: var(--ns-ardoise); }
+.ns-liste__texte { flex: 1; min-width: 0; }
+.ns-liste__ligne--retard .ns-liste__date { color: var(--ns-brique); font-weight: 500; }
+
+/* ---------- Onglets ---------- */
+.ns-onglets { display: flex; gap: 4px; border-bottom: 1px solid var(--ns-ligne); margin-bottom: 16px; overflow-x: auto; }
+.ns-onglets a { padding: 8px 12px; text-decoration: none; color: var(--ns-ardoise); border-radius: var(--ns-rayon-petit) var(--ns-rayon-petit) 0 0; white-space: nowrap; }
+.ns-onglets a:hover { color: var(--ns-encre); background: var(--ns-brume); }
+.ns-onglets a[aria-current] { background: var(--ns-glacier); color: var(--ns-encre); font-weight: 600; }
+.ns-onglets a:focus-visible, .ns-entete nav a:focus-visible { outline-offset: -2px; }
+
+/* ---------- Logo ---------- */
+.ns-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ns-encre); }
+.ns-logo img, .ns-logo svg { width: 28px; height: 28px; flex: none; }
+.ns-logo__nom { font-family: var(--ns-titre); font-weight: 500; font-size: 1.15rem; line-height: 1; }
+.ns-logo__nom small { display: block; font: 500 .6rem/1 var(--ns-chiffre); letter-spacing: .3em; text-transform: uppercase; color: var(--ns-vermillon-texte); margin-top: 5px; }
+
+/* ---------- Portail : en-tête ---------- */
+.ns-entete { display: flex; align-items: center; gap: 20px; padding: 12px 24px; background: var(--ns-blanc); border-bottom: 1px solid var(--ns-ligne); }
+.ns-entete nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.ns-entete nav a { padding: 6px 10px; border-radius: var(--ns-rayon-petit); text-decoration: none; color: var(--ns-ardoise); font-size: .9rem; }
+.ns-entete nav a:hover { color: var(--ns-encre); background: var(--ns-brume); }
+.ns-entete nav a[aria-current] { background: var(--ns-glacier); color: var(--ns-encre); font-weight: 600; }
+.ns-entete__compte { margin-left: auto; font-size: .87rem; color: var(--ns-ardoise); }
+
+/* ---------- Console : barre latérale encre ---------- */
+.ns-barre { display: flex; flex-direction: column; gap: 2px; padding: 16px 12px; background: var(--ns-encre); color: var(--ns-encre-brume); }
+.ns-barre a { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 7px 10px; border-radius: var(--ns-rayon-petit); color: var(--ns-encre-brume); text-decoration: none; font-size: .9rem; }
+.ns-barre a:hover { background: var(--ns-encre-claire); color: var(--ns-blanc); }
+.ns-barre a[aria-current] { background: var(--ns-encre-claire); color: var(--ns-blanc); font-weight: 600; }
+.ns-barre .ns-logo { justify-content: flex-start; color: var(--ns-blanc); padding: 0 10px 14px; }
+.ns-barre .ns-logo__nom small { color: var(--ns-vermillon-clair); }
+.ns-barre__groupe { margin: 0; padding: 14px 10px 6px; font: 500 .66rem/1 var(--ns-chiffre); letter-spacing: .14em; text-transform: uppercase; color: var(--ns-encre-voilee); }
+.ns-barre :focus-visible { outline-color: var(--ns-blanc); }
+.ns-barre small, .ns-barre .ns-discret, .ns-bandeau small, .ns-bandeau .ns-discret { color: var(--ns-encre-brume); }
+.ns-barre .ns-surtitre, .ns-bandeau .ns-surtitre { color: var(--ns-vermillon-clair); }
+.ns-barre .ns-bouton--lien, .ns-bandeau .ns-bouton--lien { color: var(--ns-encre-brume); text-decoration-color: var(--ns-encre-voilee); }
+.ns-barre .ns-bouton--lien:hover, .ns-bandeau .ns-bouton--lien:hover { color: var(--ns-blanc); text-decoration-color: var(--ns-blanc); }
+
+/* ---------- Bandeau d'instance ---------- */
+.ns-bandeau { display: flex; gap: 10px; align-items: baseline; padding: 7px 24px; background: var(--ns-encre); color: var(--ns-encre-brume); font-size: .85rem; }
+.ns-bandeau strong { font: 500 .68rem/1 var(--ns-chiffre); letter-spacing: .12em; text-transform: uppercase; color: var(--ns-vermillon-clair); }
+.ns-bandeau a { color: var(--ns-blanc); }
+.ns-bandeau :focus-visible { outline-color: var(--ns-blanc); }
+
+/* ---------- Petits écrans ---------- */
+@media (max-width: 720px) {
+  body { font-size: 14px; }
+  .ns-page { padding: 16px; }
+  .ns-entete { flex-wrap: wrap; gap: 10px; padding: 10px 16px; }
+  .ns-entete nav { order: 3; width: 100%; flex-wrap: nowrap; overflow-x: auto; }
+  .ns-liste > li { flex-wrap: wrap; }
+  .ns-liste__date { flex-basis: 100%; }
+}

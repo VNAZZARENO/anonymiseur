@@ -8,19 +8,35 @@ const path = require('node:path');
 const RACINE = path.join(__dirname, '..');
 const PUBLIC = path.join(RACINE, 'public');
 const lire = (nom) => fs.readFileSync(path.join(PUBLIC, nom), 'utf8');
-const fichiers = () => fs.readdirSync(PUBLIC).filter((nom) => nom !== 'favicon.ico').sort();
+const fichiers = () => fs.readdirSync(PUBLIC).filter((nom) => fs.statSync(path.join(PUBLIC, nom)).isFile()).sort();
+// Copie de l'identité Nazzareno Systems, écrite par identite/sync.sh : feuilles, polices, logos, icônes.
+const NS = path.join(PUBLIC, 'ns');
+const fichiersNs = (dossier = NS) => fs.readdirSync(dossier, { withFileTypes: true }).flatMap((e) =>
+  e.isDirectory() ? fichiersNs(path.join(dossier, e.name)) : [path.relative(PUBLIC, path.join(dossier, e.name))]
+).sort();
+const EXTENSIONS_NS = ['.css', '.woff2', '.svg', '.png', '.ico', '.txt', '.sha256', ''];
 
 const ATTENDUS = ['app.css', 'app.js', 'detecteurs.js', 'docx.js', 'index.html', 'noms.js', 'remplacement.js', 'sortie.js', 'zip.js'];
 const DEPOT = 'https://github.com/VNAZZARENO/anonymiseur';
 
-test('public/ contient exactement les fichiers attendus, sans sous-dossier', () => {
-  assert.deepEqual(fs.readdirSync(PUBLIC).sort(), ATTENDUS.concat('favicon.ico').sort());
-  // L'icône évite au navigateur une demande sans réponse ; c'est une image de 16 points, sans code.
-  const icone = fs.readFileSync(path.join(PUBLIC, 'favicon.ico'));
-  assert.deepEqual(Array.from(icone.subarray(0, 4)), [0, 0, 1, 0]);
-  assert.ok(icone.length < 2000);
-  assert.match(lire('index.html'), /<link rel="icon" href="favicon\.ico">/);
-  for (const nom of fichiers()) assert.ok(fs.statSync(path.join(PUBLIC, nom)).isFile());
+test('public/ contient exactement les fichiers attendus et la copie de l’identité', () => {
+  assert.deepEqual(fs.readdirSync(PUBLIC).sort(), ATTENDUS.concat('ns').sort());
+  assert.deepEqual(fichiers(), ATTENDUS);
+});
+
+test('public/ns : copie de l’identité par sync.sh, sans code exécutable', () => {
+  for (const nom of ['ns/VERSION', 'ns/MARQUE.sha256', 'ns/ns.css', 'ns/jetons.css', 'ns/fonts/polices.css', 'ns/logo/signe.svg', 'ns/web/favicon.svg']) {
+    assert.ok(fs.existsSync(path.join(PUBLIC, nom)), nom);
+  }
+  for (const nom of fichiersNs()) {
+    assert.ok(EXTENSIONS_NS.includes(path.extname(nom)), nom + ' : type de fichier inattendu');
+  }
+  for (const nom of fichiersNs().filter((n) => n.endsWith('.svg'))) {
+    const svg = lire(nom);
+    assert.doesNotMatch(svg, /<script|<foreignObject|\son[a-z]+\s*=|href\s*=/i, nom);
+  }
+  // L'icône de l'onglet évite au navigateur une demande de /favicon.ico sans réponse.
+  assert.match(lire('index.html'), /<link rel="icon" href="ns\/web\/favicon\.svg" type="image\/svg\+xml">/);
 });
 
 test('aucun moyen de requête, de stockage ou de chargement de code dans les fichiers livrés', () => {
@@ -30,9 +46,11 @@ test('aucun moyen de requête, de stockage ou de chargement de code dans les fic
     /\bimport\s*\(/, /\bimport\s+[\w{*]/, /importScripts/, /\bWorker\s*\(/, /SharedWorker/, /\beval\s*\(/, /new\s+Function\b/,
     /window\.open/, /location\.(?:href|assign|replace)\s*[=(]/, /\.submit\s*\(/, /postMessage/, /new\s+Image\b/, /\.src\s*=/, /innerHTML|outerHTML|insertAdjacentHTML|document\.write/,
   ];
-  for (const nom of fichiers()) {
+  for (const nom of fichiers().concat(fichiersNs().filter((n) => n.endsWith('.css')))) {
     const contenu = lire(nom);
     for (const motif of interdits) {
+      // Dans une feuille de style, « @import url(…) » appelle une feuille ; le test des feuilles le contrôle.
+      if (nom.endsWith('.css') && String(motif) === String(/\bimport\s+[\w{*]/)) continue;
       assert.doesNotMatch(contenu, motif, nom + ' contient ' + motif);
     }
   }
@@ -40,7 +58,7 @@ test('aucun moyen de requête, de stockage ou de chargement de code dans les fic
 
 test('aucune adresse externe dans public/, hormis le lien du dépôt en pied de page', () => {
   const motif = /(?:\b[a-z][a-z0-9+.-]*:)?\/\/[a-z0-9-]+\.[a-z]{2,}[^\s"'<>)]*/gi;
-  for (const nom of fichiers()) {
+  for (const nom of fichiers().concat(fichiersNs().filter((n) => n.endsWith('.css')))) {
     const trouvees = lire(nom).match(motif) || [];
     if (nom === 'index.html') {
       assert.deepEqual(trouvees, [DEPOT], nom);
@@ -54,10 +72,16 @@ test('aucune adresse externe dans public/, hormis le lien du dépôt en pied de 
   assert.match(pied, /<a [^>]*href="https:\/\/github\.com\/VNAZZARENO\/anonymiseur"[^>]*rel="noopener noreferrer"/);
 });
 
-test('feuille de style : aucune ressource appelée', () => {
+test('feuilles de style : app.css n’appelle rien, celles de l’identité n’appellent que des fichiers de ns/', () => {
   const css = lire('app.css');
   assert.doesNotMatch(css, /url\s*\(/i);
   assert.doesNotMatch(css, /@import|@font-face/i);
+  for (const nom of fichiersNs().filter((n) => n.endsWith('.css'))) {
+    for (const [, adresse] of lire(nom).matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/g)) {
+      const cible = path.join(PUBLIC, path.dirname(nom), adresse);
+      assert.ok(cible.startsWith(NS + path.sep) && fs.existsSync(cible), nom + ' appelle ' + adresse);
+    }
+  }
 });
 
 function cspDeCaddy() {
@@ -107,7 +131,10 @@ test('aucun script en ligne, aucun style en ligne, aucun gestionnaire en attribu
   assert.doesNotMatch(html, /<style\b/i);
   assert.doesNotMatch(html, /\sstyle\s*=/i);
   assert.doesNotMatch(html, /\son[a-z]+\s*=/i);
-  assert.doesNotMatch(html, /<form\b|<iframe\b|<object\b|<embed\b|<img\b|<base\b/i);
+  assert.doesNotMatch(html, /<form\b|<iframe\b|<object\b|<embed\b|<base\b/i);
+  for (const img of html.match(/<img\b[^>]*>/g) || []) {
+    assert.match(img, /^<img src="ns\/logo\/[a-z-]+\.svg" alt="" width="\d+" height="\d+">$/, 'seul le signe de l’identité est une image : ' + img);
+  }
   assert.doesNotMatch(html, /javascript:/i);
 });
 
@@ -115,7 +142,8 @@ test('scripts : chargés dans l’ordre des dépendances, tous présents dans pu
   const html = lire('index.html');
   const sources = Array.from(html.matchAll(/<script src="([^"]+)"><\/script>/g), (m) => m[1]);
   assert.deepEqual(sources, ['zip.js', 'detecteurs.js', 'noms.js', 'remplacement.js', 'docx.js', 'sortie.js', 'app.js']);
-  assert.match(html, /<link rel="stylesheet" href="app\.css">/);
+  const feuilles = Array.from(html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g), (m) => m[1]);
+  assert.deepEqual(feuilles, ['ns/ns.css', 'app.css']);
 });
 
 test('les modules de logique restent séparés de l’interface', () => {

@@ -1,0 +1,71 @@
+/* Identité Nazzareno Systems : mise en page A4 pour WeasyPrint. Même vocabulaire de classes
+   que l'ancienne charte (tete, cartes, prix…), valeurs tirées de jetons.css. */
+@import url("fonts/polices.css");
+@import url("jetons.css");
+
+@page { size: A4; margin: 15mm 18mm 20mm 18mm; @bottom-center { content: element(pied); width: 100%; } }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-family: var(--ns-texte); font-size: 9.5pt; line-height: 1.45; color: var(--ns-encre); }
+h1, h2, h3, h4, .enseigne { font-family: var(--ns-titre); }
+a { color: var(--ns-encre); text-decoration: none; }
+strong { font-weight: 600; }
+.num { font-family: var(--ns-chiffre); font-size: .9em; font-variant-numeric: tabular-nums; }
+
+.pied { position: running(pied); display: flex; justify-content: space-between; border-top: .3pt solid var(--ns-ligne-forte); padding-top: 2.5mm; font-size: 7.5pt; color: var(--ns-ardoise); }
+.pied .page::after { content: "Page " counter(page) "/" counter(pages); }
+
+.tete { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 5mm; border-bottom: .6pt solid var(--ns-encre); }
+.enseigne { display: flex; align-items: center; gap: 3mm; font-size: 17pt; font-weight: 500; line-height: 1.05; }
+.enseigne img { width: 10mm; height: 10mm; }
+.metier { font-family: var(--ns-chiffre); font-size: 7pt; letter-spacing: .3em; text-transform: uppercase; color: var(--ns-vermillon-texte); margin-top: 1.5mm; padding-left: 13mm; }
+.piece { text-align: right; }
+.piece h1 { font-size: 19pt; font-weight: 500; line-height: 1.05; margin-bottom: 3.5mm; }
+.piece p { color: var(--ns-ardoise); }
+
+.chapeau { padding-top: 4.5mm; font-size: 10.3pt; line-height: 1.45; }
+
+.cartes { display: flex; gap: 4mm; margin-top: 5mm; }
+.carte { flex: 1; border: .3pt solid var(--ns-ligne-forte); border-radius: 1.5mm; padding: 3.5mm 4mm 4mm; }
+.carte.choix { border: .9pt solid var(--ns-encre); background: var(--ns-glacier); }
+.palier { font-family: var(--ns-chiffre); font-size: 7pt; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ns-ardoise); }
+.choix .palier { color: var(--ns-vermillon-texte); }
+.prix { font-family: var(--ns-chiffre); font-size: 14pt; font-weight: 500; color: var(--ns-encre); white-space: nowrap; margin-top: 1.5mm; }
+.carte .pour { margin-top: 1.5mm; font-size: 8.6pt; color: var(--ns-ardoise); }
+
+section { margin-top: 7mm; }
+section > h2 { font-size: 14pt; font-weight: 500; line-height: 1.15; padding-bottom: 2.5mm; margin-bottom: 3mm; border-bottom: .6pt solid var(--ns-encre); break-after: avoid; }
+section > h2 span { display: block; font-family: var(--ns-chiffre); font-size: 7.5pt; letter-spacing: .12em; text-transform: uppercase; color: var(--ns-vermillon-texte); margin-bottom: 1.2mm; }
+h3 { font-family: var(--ns-chiffre); font-size: 7pt; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ns-ardoise); margin: 4.5mm 0 2mm; break-after: avoid; }
+p + p { margin-top: 1.8mm; }
+ul, ol { padding-left: 4.5mm; margin-top: 1.5mm; }
+li { margin-bottom: 1.1mm; }
+li::marker { color: var(--ns-vermillon-texte); }
+.rupture { break-before: page; margin-top: 0; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 2mm; font-size: 8.7pt; line-height: 1.33; }
+thead { display: table-header-group; }
+th, td { padding: 1.4mm 2.5mm 1.4mm 0; border-bottom: .3pt solid var(--ns-ligne-forte); vertical-align: top; text-align: left; }
+thead th { font-family: var(--ns-chiffre); font-size: 6.8pt; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ns-ardoise); border-bottom: .6pt solid var(--ns-encre); vertical-align: bottom; }
+tbody th { font-weight: 600; }
+tr { break-inside: avoid; }
+td.d, th.d { text-align: right; padding-right: 0; padding-left: 2.5mm; white-space: nowrap; }
+td.d { font-family: var(--ns-chiffre); font-size: .92em; font-variant-numeric: tabular-nums; }
+tr.choix th, tr.choix td { font-weight: 500; background: var(--ns-glacier); }
+tr.choix th { font-weight: 600; }
+
+.encadre { border: .9pt solid var(--ns-encre); border-radius: 1.5mm; background: var(--ns-glacier); padding: 3.5mm 4.5mm; margin-top: 3.5mm; break-inside: avoid; }
+.encadre .palier { color: var(--ns-vermillon-texte); margin-bottom: 1.2mm; }
+.citation { background: var(--ns-brume); border-radius: 1.5mm; padding: 2.5mm 4mm; margin: 3mm 0; font-family: var(--ns-titre); font-style: italic; }
+.citation span { display: block; font-family: var(--ns-texte); font-style: normal; font-size: 8.3pt; color: var(--ns-ardoise); margin-top: 1mm; }
+.fiche { border: .3pt solid var(--ns-ligne-forte); border-radius: 1.5mm; padding: 3.5mm 4.5mm; margin-top: 3mm; break-inside: avoid; }
+.fiche h4 { font-size: 11pt; font-weight: 600; }
+.fiche h4 span { font-family: var(--ns-chiffre); font-size: 7pt; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ns-vermillon-texte); margin-left: 2mm; }
+.fiche table { margin-top: 1.5mm; }
+.fiche tbody th { width: 30mm; font-weight: 400; color: var(--ns-ardoise); }
+.fiche tr:last-child th, .fiche tr:last-child td { border-bottom: 0; }
+.deux { display: flex; gap: 6mm; }
+.deux > div { flex: 1; }
+.reserve { margin-top: 2.5mm; font-size: 7.8pt; line-height: 1.35; color: var(--ns-ardoise); }
+.sources { font-size: 7.6pt; line-height: 1.35; color: var(--ns-ardoise); columns: 2; column-gap: 8mm; }
+.sources li { break-inside: avoid; margin-bottom: .8mm; }
+.sources a { word-break: break-all; }
